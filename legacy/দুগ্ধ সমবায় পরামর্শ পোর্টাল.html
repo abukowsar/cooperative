@@ -1,0 +1,396 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>দুগ্ধ সমবায় পরামর্শ পোর্টাল</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Tiro+Bangla&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: masthead ledger strip → tab rail → single working column; forum list is the default view */
+:root{
+  --green:#0A5C43; --green-ink:#08452f; --gold:#B98A2F; --cream:#F7F1E3;
+  --bg:#FBF8F1; --surface:#FFFFFF; --fg:#1E2A24; --muted:#5E6B63; --line:#E3DBC8;
+  --green-soft:#E3EFE8; --gold-soft:#F6EBD3; --red:#B3261E; --red-soft:#FBE7E5;
+  --on-green:#FFFFFF;
+  --f-display:"Tiro Bangla","Noto Serif Bengali",Georgia,serif;
+  --f-body:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --green:#4FB38C; --green-ink:#7FD0AE; --gold:#D9AE5A; --cream:#1C2420;
+  --bg:#121815; --surface:#1A221E; --fg:#E8EEE9; --muted:#9AA9A0; --line:#2C3832;
+  --green-soft:#1D3328; --gold-soft:#33291A; --red:#F08A80; --red-soft:#3A1F1C; --on-green:#0B1410;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --green:#4FB38C; --green-ink:#7FD0AE; --gold:#D9AE5A; --cream:#1C2420;
+  --bg:#121815; --surface:#1A221E; --fg:#E8EEE9; --muted:#9AA9A0; --line:#2C3832;
+  --green-soft:#1D3328; --gold-soft:#33291A; --red:#F08A80; --red-soft:#3A1F1C; --on-green:#0B1410;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:880px;margin:0 auto;padding-inline:16px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* masthead */
+.mast{background:var(--cream);border-bottom:3px double var(--gold)}
+.mast .wrap{padding-block:22px 18px;display:grid;gap:10px}
+.dept{font-size:13px;color:var(--muted);letter-spacing:.02em}
+.mast h1{font-size:clamp(24px,5vw,34px);color:var(--green-ink);line-height:1.25}
+.mast p{margin:0;color:var(--muted);max-width:62ch}
+.ledger{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:6px;font-size:14px}
+.ledger b{font-family:var(--f-display);font-weight:400;font-size:22px;color:var(--green-ink);margin-right:4px;font-variant-numeric:tabular-nums}
+.ledger span{color:var(--muted)}
+
+/* tabs */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tab{background:none;border:0;padding:12px 12px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:500}
+.tab[aria-selected="true"]{color:var(--green-ink);border-bottom-color:var(--green)}
+main .wrap{padding-block:22px 60px}
+section[role=tabpanel]{display:grid;gap:18px}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--green);background:var(--green);color:var(--on-green);border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600}
+.btn.ghost{background:transparent;color:var(--green-ink)}
+.btn.small{padding:4px 10px;font-size:14px;font-weight:500}
+.btn.danger{border-color:var(--red);color:var(--red);background:transparent}
+.btn.danger.armed{background:var(--red);color:var(--surface)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+label{display:grid;gap:4px;font-size:14px;font-weight:500}
+input,select,textarea{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:90px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.form .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--muted)}
+.notice{border:1px solid var(--gold);background:var(--gold-soft);border-radius:8px;padding:10px 14px;font-size:14px}
+.err{color:var(--red);font-size:14px}
+
+/* forum */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;min-width:0;flex:1 1 100%}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:14px;white-space:nowrap;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.search{flex:1 1 220px}
+.qlist{display:grid;gap:12px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.q-head{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:14px 16px;cursor:pointer;background:none;border:0;text-align:left;width:100%}
+.tally{width:54px;text-align:center;border-radius:8px;padding:6px 0;font-size:12px;line-height:1.2;background:var(--gold-soft);color:var(--fg)}
+.tally b{display:block;font-family:var(--f-display);font-weight:400;font-size:20px;font-variant-numeric:tabular-nums}
+.tally.ans{background:var(--green-soft)}
+.tally.done{background:var(--green);color:var(--on-green)}
+.q-title{font-weight:600;font-size:17px;line-height:1.4;min-width:0;overflow-wrap:anywhere}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted);margin-top:4px}
+.tag{color:var(--green-ink);font-weight:500}
+.status{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid currentColor}
+.status.open{color:var(--gold)} .status.done{color:var(--green)}
+.q-body{border-top:1px solid var(--line);padding:14px 16px;display:grid;gap:14px}
+.q-text{white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+.answers{display:grid;gap:10px}
+.a{border-left:3px solid var(--line);padding:4px 0 4px 12px}
+.a.expert{border-left-color:var(--green)}
+.a p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.role{font-size:12px;padding:0 7px;border-radius:4px;background:var(--green-soft);color:var(--green-ink)}
+.mod{display:flex;gap:8px;flex-wrap:wrap}
+.empty{border:1px dashed var(--line);border-radius:var(--r);padding:28px 18px;text-align:center;color:var(--muted)}
+.empty h3{color:var(--fg);font-size:20px;margin-bottom:6px}
+
+/* about */
+.lede{font-size:17px;max-width:65ch}
+.acts{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.acts li{display:grid;grid-template-columns:30px 1fr;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.acts .n{font-family:var(--f-display);color:var(--gold);font-size:20px;line-height:1.3}
+h2{font-size:24px;color:var(--green-ink)}
+.goals{display:flex;flex-wrap:wrap;gap:8px}
+.goals span{background:var(--green-soft);color:var(--green-ink);border-radius:6px;padding:4px 12px;font-weight:500}
+.partners{display:grid;gap:16px}
+.pgroup h3{font-size:18px;margin-bottom:8px}
+.pgroup ul{margin:0;padding-left:20px;columns:2 240px;column-gap:28px}
+.pgroup li{break-inside:avoid;margin-bottom:4px}
+.ref{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.links{display:grid;gap:10px}
+.links a{display:block;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:var(--green-ink);text-decoration:none;overflow-wrap:anywhere}
+.links a small{display:block;color:var(--muted)}
+.sign{background:var(--cream);border-radius:var(--r);padding:16px;border:1px solid var(--line)}
+.sign b{font-family:var(--f-display);font-weight:400;font-size:20px;color:var(--green-ink)}
+
+/* experts */
+.experts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:4px;min-width:0}
+.ex b{font-size:17px}
+.ex .org{color:var(--muted);font-size:14px}
+.ex .phone{font-family:var(--f-mono);font-size:14px;user-select:all}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--green);color:var(--on-green);padding:10px 18px;border-radius:8px;font-weight:500;z-index:20}
+@media (prefers-reduced-motion:no-preference){.q-body{animation:in .18s ease-out}@keyframes in{from{opacity:.4;transform:translateY(-3px)}}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="dept">সমবায় অধিদপ্তর · পল্লী উন্নয়ন ও সমবায় বিভাগ</div>
+    <h1>দুগ্ধ ঘাটতি উপজেলায় দুগ্ধ সমবায়ের কার্যক্রম সম্প্রসারণ প্রকল্প</h1>
+    <p>খামারীরা সমস্যা জানাবেন, বিশেষজ্ঞ ও অভিজ্ঞ সমবায়ীরা পরামর্শ দেবেন। এক জায়গায় প্রশ্ন, উত্তর ও যোগাযোগ।</p>
+    <div class="ledger" aria-label="প্রকল্পের সংক্ষিপ্ত তথ্য">
+      <div><b>৮১</b><span>উপজেলা (আগে ৫০)</span></div>
+      <div><b id="statQ">০</b><span>প্রশ্ন</span></div>
+      <div><b id="statA">০</b><span>পরামর্শ</span></div>
+      <div><b id="statE">০</b><span>নিবন্ধিত বিশেষজ্ঞ</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="বিভাগ">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" id="t-forum" aria-controls="p-forum" aria-selected="true">সমস্যা ও পরামর্শ</button>
+    <button class="tab" role="tab" id="t-experts" aria-controls="p-experts" aria-selected="false">বিশেষজ্ঞ তালিকা</button>
+    <button class="tab" role="tab" id="t-about" aria-controls="p-about" aria-selected="false">প্রকল্প পরিচিতি</button>
+    <button class="tab" role="tab" id="t-partners" aria-controls="p-partners" aria-selected="false">অংশীদার</button>
+    <button class="tab" role="tab" id="t-contact" aria-controls="p-contact" aria-selected="false">যোগাযোগ</button>
+  </div>
+</nav>
+
+<main><div class="wrap">
+
+<!-- FORUM -->
+<section role="tabpanel" id="p-forum" aria-labelledby="t-forum">
+  <div id="dbNotice" class="notice" hidden></div>
+  <div class="toolbar">
+    <input class="search" id="q-search" type="search" placeholder="প্রশ্ন খুঁজুন (যেমন: ওলান ফোলা, ঘাস)" aria-label="প্রশ্ন খুঁজুন">
+    <button class="btn" id="askToggle">+ সমস্যা জানান</button>
+    <div class="chips" id="catChips" role="group" aria-label="বিষয় অনুযায়ী বাছাই"></div>
+  </div>
+
+  <form class="form" id="askForm" hidden>
+    <h3>আপনার সমস্যা লিখুন</h3>
+    <div class="grid2">
+      <label>আপনার নাম<input id="ask-name" required maxlength="60"></label>
+      <label>উপজেলা / সমিতি<input id="ask-upz" required maxlength="80" placeholder="যেমন: রামগতি, লক্ষ্মীপুর"></label>
+    </div>
+    <label>বিষয়<select id="ask-cat" required></select></label>
+    <label>সংক্ষেপে সমস্যা<input id="ask-title" required maxlength="140" placeholder="যেমন: বকনা গরু ঠিকমতো খাচ্ছে না"></label>
+    <label>বিস্তারিত<textarea id="ask-body" required maxlength="3000" placeholder="গাভীর বয়স, জাত, কতদিন ধরে সমস্যা, কী খাওয়ানো হয়, দৈনিক কত লিটার দুধ দেয় ইত্যাদি লিখুন"></textarea></label>
+    <div class="err" id="askErr" hidden></div>
+    <div class="row"><button type="button" class="btn ghost" id="askCancel">বাতিল</button><button class="btn" type="submit">প্রকাশ করুন</button></div>
+  </form>
+
+  <div class="qlist" id="qlist">
+    <div class="empty" id="qEmpty"><h3>প্রশ্ন লোড হচ্ছে</h3>খামারীদের পাঠানো সমস্যা ও বিশেষজ্ঞদের পরামর্শ এখানে দেখা যাবে।</div>
+  </div>
+</section>
+
+<!-- EXPERTS -->
+<section role="tabpanel" id="p-experts" aria-labelledby="t-experts" hidden>
+  <div class="toolbar">
+    <p class="hint" style="margin:0;max-width:60ch">প্রাণিসম্পদ, ডেইরি ও সমবায় বিষয়ে অভিজ্ঞ ব্যক্তিরা এখানে নাম নিবন্ধন করুন, যাতে উপজেলা পর্যায়ের খামারীরা সরাসরি যোগাযোগ করতে পারেন।</p>
+    <button class="btn" id="exToggle">+ বিশেষজ্ঞ হিসেবে যুক্ত হোন</button>
+  </div>
+  <form class="form" id="exForm" hidden>
+    <h3>বিশেষজ্ঞ নিবন্ধন</h3>
+    <div class="grid2">
+      <label>নাম<input id="ex-name" required maxlength="60"></label>
+      <label>প্রতিষ্ঠান ও পদবি<input id="ex-org" required maxlength="100" placeholder="যেমন: উপজেলা প্রাণিসম্পদ অফিস"></label>
+      <label>বিশেষজ্ঞতার বিষয়<select id="ex-cat" required></select></label>
+      <label>কর্মএলাকা (জেলা/উপজেলা)<input id="ex-area" required maxlength="80"></label>
+      <label>মোবাইল নম্বর (ঐচ্ছিক)<input id="ex-phone" inputmode="tel" maxlength="20" placeholder="01XXXXXXXXX"></label>
+    </div>
+    <p class="hint" style="margin:0">মোবাইল নম্বর দিলে এই পোর্টালের সব ব্যবহারকারী তা দেখতে পাবেন।</p>
+    <div class="err" id="exErr" hidden></div>
+    <div class="row"><button type="button" class="btn ghost" id="exCancel">বাতিল</button><button class="btn" type="submit">নিবন্ধন করুন</button></div>
+  </form>
+  <div class="experts" id="exlist"></div>
+  <div class="empty" id="exEmpty"><h3>এখনো কেউ নিবন্ধন করেননি</h3>প্রথম বিশেষজ্ঞ হিসেবে যুক্ত হতে উপরের বোতাম চাপুন।</div>
+</section>
+
+<!-- ABOUT -->
+<section role="tabpanel" id="p-about" aria-labelledby="t-about" hidden>
+  <p class="lede">দুগ্ধ চাষী ও খামারীদের সমবায় সমিতিতে সংগঠিত করে উন্নত জাতের গাভী পালনের মাধ্যমে দুধের উৎপাদন বাড়ানো এই প্রকল্পের মূল লক্ষ্য। প্রকল্পটি ৫০টি উপজেলায় চলছিল; সেপ্টেম্বরে প্রশাসনিক আদেশের পর এখন ৮১টি উপজেলায় বাস্তবায়িত হবে।</p>
+  <div class="goals"><span>দুধের উৎপাদন বৃদ্ধি</span><span>কর্মসংস্থান সৃষ্টি</span><span>নারীর ক্ষমতায়ন</span></div>
+  <h2>প্রকল্পের কার্যক্রম</h2>
+  <ul class="acts" id="acts"></ul>
+</section>
+
+<!-- PARTNERS -->
+<section role="tabpanel" id="p-partners" aria-labelledby="t-partners" hidden>
+  <div class="partners">
+    <div class="pgroup"><h3>বাস্তবায়নকারী</h3><ul><li>সমবায় অধিদপ্তর, পল্লী উন্নয়ন ও সমবায় বিভাগ</li></ul></div>
+    <div class="pgroup"><h3>টেকনিক্যাল পার্টনার</h3><ul><li>প্রাণিসম্পদ অধিদপ্তর (DLS)</li><li>মিল্কভিটা</li><li>ব্র্যাক কৃত্রিম প্রজনন এন্টারপ্রাইজ</li></ul></div>
+    <div class="pgroup"><h3>প্রশিক্ষণ পার্টনার</h3><ul>
+      <li>পল্লী উন্নয়ন একাডেমী (RDA), বগুড়া</li><li>বাংলাদেশ পল্লী উন্নয়ন একাডেমী (বার্ড), কুমিল্লা</li><li>বাংলাদেশ কৃষি বিশ্ববিদ্যালয়, ময়মনসিংহ</li><li>চট্টগ্রাম ভেটেরিনারি ও এনিম্যাল সায়েন্সেস বিশ্ববিদ্যালয়</li><li>রুরাল রিকনস্ট্রাকশন ফাউন্ডেশন (RRF)</li><li>ইসিবি ফাউন্ডেশন</li><li>ইনটেক এগ্রো লিমিটেড, বগুড়া</li><li>রেশমা কৃষি উদ্যোগ, বগুড়া</li><li>বাংলাদেশ সমবায় একাডেমী, কোটবাড়ী, কুমিল্লা ও অধীন ১০টি আঞ্চলিক সমবায় প্রশিক্ষণ ইন্সটিটিউট</li></ul></div>
+    <div class="pgroup"><h3>সহযোগী প্রতিষ্ঠান</h3><ul><li>কৃষি সম্প্রসারণ অধিদপ্তর</li><li>যুব উন্নয়ন অধিদপ্তর</li><li>ইডকল (IDCOL)</li><li>সবুজ শক্তি</li><li>বাংলাদেশ ডেইরি এন্ড ফ্যাটেনিং এসোসিয়েশন</li></ul></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section role="tabpanel" id="p-contact" aria-labelledby="t-contact" hidden>
+  <div class="sign">
+    <b>তোফায়েল আহম্মদ</b><br>প্রকল্প পরিচালক (যুগ্ম-নিবন্ধক), বিসিএস সমবায় ক্যাডার<br>
+    <span class="hint">দুগ্ধ ঘাটতি উপজেলায় দুগ্ধ সমবায়ের কার্যক্রম সম্প্রসারণ প্রকল্প, সমবায় অধিদপ্তর</span>
+  </div>
+  <div class="links">
+    <a href="https://www.facebook.com/share/g/1By3MpRsVw/" target="_blank" rel="noopener">ফেসবুক গ্রুপ: দুগ্ধ সমবায়ের কার্যক্রম সম্প্রসারণ প্রকল্প<small>facebook.com/share/g/1By3MpRsVw</small></a>
+    <a href="https://youtube.com/@tofayelahamed9004" target="_blank" rel="noopener">ইউটিউব চ্যানেল: গাভী পালন বিষয়ক ভিডিও<small>youtube.com/@tofayelahamed9004</small></a>
+    <a href="https://www.facebook.com/profile.php?id=61555812547446" target="_blank" rel="noopener">ফেসবুক আইডি: তোফায়েল আহম্মদ, প্রকল্প পরিচালক<small>facebook.com/profile.php?id=61555812547446</small></a>
+  </div>
+  <p class="hint">জেলা ও উপজেলা সমবায় অফিসারগণ আওতাধীন সমিতির সদস্যদের এই পোর্টালের লিংক ও ফেসবুক গ্রুপে যুক্ত করবেন।</p>
+</section>
+
+</div></main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const CATS=[
+ ["savings","সঞ্চয়"],["training","প্রশিক্ষণ"],["loan","ঋণ ও বকনা ক্রয়"],["care","লালন-পালন ও কৃত্রিম প্রজনন"],
+ ["health","টিকা ও রোগ"],["fodder","ঘাস ও খাদ্য"],["market","দুধ বাজারজাতকরণ"],["processing","দুগ্ধজাত পণ্য"],
+ ["manure","গোবর, বায়োগ্যাস ও ভার্মি কম্পোস্ট"],["investment","মোটাতাজাকরণ ও বিনিয়োগ"],["organic","নিরাপদ সবজি ও ফসল"],["other","অন্যান্য"]];
+const CATN=Object.fromEntries(CATS);
+const ACTS=["সমবায়ীদের সঞ্চয়ে উদ্বুদ্ধ করা","গাভী পালন বিষয়ক আধুনিক প্রশিক্ষণ","দুটি উন্নত জাতের বকনা ক্রয়ে সহজ শর্তে ঋণ, এক বছর গ্রেস পিরিয়ড","বকনার লালন-পালন, কৃত্রিম প্রজনন ও খাদ্য ক্রয়ে সহজ শর্তে ঋণ","টিকা এবং ঘাসের কাটিং বা বীজ সরবরাহ","উৎপাদিত দুধ বাজারজাতকরণে সহযোগিতা","দুগ্ধজাত পণ্য উৎপাদনে সহযোগিতা","গোবর ব্যবস্থাপনা: ভার্মি কম্পোস্ট ও বায়োগ্যাস","সমিতির মূলধনে গরু মোটাতাজাকরণ ও কৃষিভিত্তিক বিনিয়োগ","অর্গানিক ও নিরাপদ সবজি-ফসল চাষে উদ্বুদ্ধকরণ"];
+const ROLES=[["farmer","খামারী / সমবায়ী"],["expert","বিশেষজ্ঞ / চিকিৎসক"],["officer","সমবায় কর্মকর্তা"]];
+const ROLEN=Object.fromEntries(ROLES);
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function ago(t){if(!t)return"";const m=Math.floor((Date.now()-t)/60000);
+ if(m<1)return"এইমাত্র";if(m<60)return bn(m)+" মিনিট আগে";const h=Math.floor(m/60);if(h<24)return bn(h)+" ঘণ্টা আগে";
+ const d=Math.floor(h/24);if(d<30)return bn(d)+" দিন আগে";return new Date(t).toLocaleDateString("bn-BD");}
+function toast(msg){const t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600)}
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* static fills */
+$("acts").innerHTML=ACTS.map((a,i)=>`<li><span class="n">${bn(i+1)}</span><span>${esc(a)}</span></li>`).join("");
+const catOpts='<option value="">বিষয় বাছাই করুন</option>'+CATS.map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+$("ask-cat").innerHTML=catOpts;$("ex-cat").innerHTML=catOpts;
+
+/* tabs */
+const tabs=[...document.querySelectorAll(".tab")];
+function showTab(id){tabs.forEach(t=>{const on=t.id===id;t.setAttribute("aria-selected",on);$(t.getAttribute("aria-controls")).hidden=!on});lsSet("tab",id)}
+tabs.forEach(t=>t.onclick=()=>showTab(t.id));
+const savedTab=lsGet("tab");if(savedTab&&$(savedTab))showTab(savedTab);
+
+/* state */
+let db=null,user=null,me=null,canWrite=true,canMod=false;
+let questions=[],answers=[],experts=[];let filter="all",query="",open=new Set();
+const armed=new Set();
+
+$("catChips").innerHTML=`<button class="chip" data-c="all" aria-pressed="true">সব</button>`+CATS.map(([k,v])=>`<button class="chip" data-c="${k}" aria-pressed="false">${v}</button>`).join("");
+$("catChips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;filter=b.dataset.c;
+ document.querySelectorAll("#catChips .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));renderQ()};
+$("q-search").oninput=e=>{query=e.target.value.trim().toLowerCase();renderQ()};
+
+function toggleForm(form,show){$(form).hidden=!show}
+$("askToggle").onclick=()=>{toggleForm("askForm",$("askForm").hidden);if(!$("askForm").hidden)$("ask-name").focus()};
+$("askCancel").onclick=()=>toggleForm("askForm",false);
+$("exToggle").onclick=()=>{toggleForm("exForm",$("exForm").hidden);if(!$("exForm").hidden)$("ex-name").focus()};
+$("exCancel").onclick=()=>toggleForm("exForm",false);
+["ask-name"].forEach(id=>{const v=lsGet("name");if(v)$(id).value=v});
+
+function lockWrites(msg){canWrite=false;["askToggle","exToggle"].forEach(id=>$(id).disabled=true);
+ const n=$("dbNotice");n.textContent=msg;n.hidden=false;renderQ()}
+
+function writeErr(e,el){if(e&&e.code==="invalid_argument"){lockWrites("এই লিংক থেকে আপনি পড়তে পারবেন, কিন্তু লিখতে পারবেন না। লেখার অনুমতির জন্য পোর্টালের মালিকের সাথে যোগাযোগ করুন।");}
+ const m=e&&e.code==="quota_exceeded"?"ডেটাবেস পূর্ণ হয়ে গেছে। পুরনো এন্ট্রি মুছে আবার চেষ্টা করুন।":
+   e&&e.code==="invalid_argument"?"আপনার লেখার অনুমতি নেই।":"সংরক্ষণ হয়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।";
+ if(el){el.textContent=m;el.hidden=false}else toast(m)}
+
+/* render forum */
+function ansFor(id){return answers.filter(a=>a.qid===id).sort((a,b)=>a.at-b.at)}
+function renderQ(){
+ const list=$("qlist");
+ const items=questions.filter(q=>(filter==="all"||q.cat===filter)&&(!query||(q.title+" "+q.body+" "+q.upz).toLowerCase().includes(query)));
+ if(!db){list.innerHTML=`<div class="empty"><h3>প্রশ্ন লোড হচ্ছে</h3>খামারীদের পাঠানো সমস্যা ও বিশেষজ্ঞদের পরামর্শ এখানে দেখা যাবে।</div>`;return}
+ if(!questions.length){list.innerHTML=`<div class="empty"><h3>এখনো কোনো প্রশ্ন নেই</h3>গাভী পালনে কোনো সমস্যা থাকলে "সমস্যা জানান" চাপুন। প্রথম প্রশ্নটি আপনিই করুন।</div>`;return}
+ if(!items.length){list.innerHTML=`<div class="empty"><h3>মিল পাওয়া যায়নি</h3>অন্য বিষয় বা শব্দ দিয়ে খুঁজে দেখুন।</div>`;return}
+ list.innerHTML=items.map(q=>{
+  const as=ansFor(q.id),isOpen=open.has(q.id);
+  const tcls=q.resolved?"done":as.length?"ans":"";
+  return `<article class="q" data-id="${q.id}">
+   <button class="q-head" data-act="toggle" aria-expanded="${isOpen}">
+    <div class="tally ${tcls}"><b>${bn(as.length)}</b>পরামর্শ</div>
+    <div style="min-width:0"><div class="q-title">${esc(q.title)}</div>
+     <div class="meta"><span class="tag">${esc(CATN[q.cat]||"অন্যান্য")}</span><span>${esc(q.name)}, ${esc(q.upz)}</span><span>${ago(q.at)}</span>
+     ${q.resolved?'<span class="status done">সমাধান হয়েছে</span>':as.length?'':'<span class="status open">পরামর্শের অপেক্ষায়</span>'}</div></div>
+   </button>
+   ${isOpen?`<div class="q-body">
+    <p class="q-text">${esc(q.body)}</p>
+    <div class="answers">${as.map(a=>`<div class="a ${a.role==="expert"?"expert":""}">
+      <div class="meta" style="margin:0 0 4px"><b style="color:var(--fg)">${esc(a.name)}</b><span class="role">${esc(ROLEN[a.role]||"")}</span><span>${ago(a.at)}</span>
+      ${canMod?`<button class="btn danger small ${armed.has("a"+a.id)?"armed":""}" data-act="delA" data-aid="${a.id}">${armed.has("a"+a.id)?"নিশ্চিত, মুছুন":"মুছুন"}</button>`:""}</div>
+      <p>${esc(a.body)}</p></div>`).join("")||'<p class="hint" style="margin:0">এখনো কেউ পরামর্শ দেননি।</p>'}</div>
+    ${canWrite?`<form class="form" data-act="answer" style="background:var(--bg)">
+      <div class="grid2"><label>আপনার নাম<input name="name" required maxlength="60" value="${esc(lsGet("name")||"")}"></label>
+      <label>পরিচয়<select name="role">${ROLES.map(([k,v])=>`<option value="${k}" ${lsGet("role")===k?"selected":""}>${v}</option>`).join("")}</select></label></div>
+      <label>পরামর্শ<textarea name="body" required maxlength="3000" placeholder="আপনার অভিজ্ঞতা বা পরামর্শ লিখুন"></textarea></label>
+      <div class="err" hidden></div>
+      <div class="row"><button class="btn" type="submit">পরামর্শ দিন</button></div></form>`:""}
+    ${canMod?`<div class="mod"><button class="btn ghost small" data-act="resolve">${q.resolved?"অমীমাংসিত চিহ্নিত করুন":"সমাধান হয়েছে চিহ্নিত করুন"}</button>
+      <button class="btn danger small ${armed.has("q"+q.id)?"armed":""}" data-act="delQ">${armed.has("q"+q.id)?"নিশ্চিত, প্রশ্ন মুছুন":"প্রশ্ন মুছুন"}</button></div>`:""}
+   </div>`:""}
+  </article>`}).join("");
+}
+$("qlist").addEventListener("click",async e=>{
+ const b=e.target.closest("[data-act]");if(!b||b.tagName==="FORM")return;
+ const art=b.closest(".q"),id=art?.dataset.id,act=b.dataset.act;
+ if(act==="toggle"){open.has(id)?open.delete(id):open.add(id);renderQ();return}
+ if(act==="resolve"){const q=questions.find(x=>x.id===id);try{await db.doc("questions/"+id).update({resolved:!q.resolved});toast(q.resolved?"অমীমাংসিত চিহ্নিত হয়েছে":"সমাধান হয়েছে চিহ্নিত")}catch(err){writeErr(err)}return}
+ if(act==="delQ"||act==="delA"){const key=act==="delQ"?"q"+id:"a"+b.dataset.aid;
+  if(!armed.has(key)){armed.add(key);renderQ();setTimeout(()=>{armed.delete(key);renderQ()},4000);return}
+  armed.delete(key);
+  try{if(act==="delQ"){for(const a of ansFor(id))await db.doc("answers/"+a.id).delete();await db.doc("questions/"+id).delete();open.delete(id);toast("প্রশ্ন মুছে ফেলা হয়েছে")}
+   else{await db.doc("answers/"+b.dataset.aid).delete();toast("পরামর্শ মুছে ফেলা হয়েছে")}}catch(err){writeErr(err)}}
+});
+$("qlist").addEventListener("submit",async e=>{
+ const f=e.target;if(f.dataset.act!=="answer")return;e.preventDefault();
+ const id=f.closest(".q").dataset.id,err=f.querySelector(".err");err.hidden=true;
+ const el=f.elements,name=el.namedItem("name").value.trim(),body=el.namedItem("body").value.trim(),role=el.namedItem("role").value;if(!name||!body)return;
+ lsSet("name",name);lsSet("role",role);const btn=f.querySelector("button[type=submit]");btn.disabled=true;
+ try{await db.collection("answers").add({qid:id,name,role,body,at:Date.now(),by:me||null});toast("পরামর্শ প্রকাশিত হয়েছে")}
+ catch(x){writeErr(x,err);btn.disabled=false}
+});
+
+$("askForm").onsubmit=async e=>{e.preventDefault();const err=$("askErr");err.hidden=true;
+ if(!db){err.textContent="ডেটা সংযোগ এখনো তৈরি হয়নি। একটু পরে আবার চেষ্টা করুন।";err.hidden=false;return}
+ const d={name:$("ask-name").value.trim(),upz:$("ask-upz").value.trim(),cat:$("ask-cat").value,title:$("ask-title").value.trim(),body:$("ask-body").value.trim(),at:Date.now(),resolved:false,by:me||null};
+ if(!d.name||!d.upz||!d.cat||!d.title||!d.body)return;lsSet("name",d.name);
+ try{const ref=await db.collection("questions").add(d);open.add(ref.id);["ask-title","ask-body"].forEach(i=>$(i).value="");$("ask-cat").value="";
+  toggleForm("askForm",false);filter="all";document.querySelectorAll("#catChips .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.c==="all"));toast("আপনার প্রশ্ন প্রকাশিত হয়েছে")}
+ catch(x){writeErr(x,err)}};
+
+/* experts */
+function renderEx(){
+ $("exEmpty").hidden=experts.length>0;
+ $("exlist").innerHTML=experts.map(x=>`<div class="ex"><b>${esc(x.name)}</b><span class="org">${esc(x.org)}</span>
+  <span class="tag">${esc(CATN[x.cat]||"")}</span><span class="hint">কর্মএলাকা: ${esc(x.area)}</span>
+  ${x.phone?`<span class="phone">${esc(x.phone)}</span>`:""}
+  ${canMod?`<div><button class="btn danger small ${armed.has("e"+x.id)?"armed":""}" data-eid="${x.id}">${armed.has("e"+x.id)?"নিশ্চিত, মুছুন":"তালিকা থেকে সরান"}</button></div>`:""}</div>`).join("");
+}
+$("exlist").onclick=async e=>{const b=e.target.closest("[data-eid]");if(!b)return;const k="e"+b.dataset.eid;
+ if(!armed.has(k)){armed.add(k);renderEx();setTimeout(()=>{armed.delete(k);renderEx()},4000);return}
+ armed.delete(k);try{await db.doc("experts/"+b.dataset.eid).delete();toast("তালিকা থেকে সরানো হয়েছে")}catch(x){writeErr(x)}};
+$("exForm").onsubmit=async e=>{e.preventDefault();const err=$("exErr");err.hidden=true;
+ if(!db){err.textContent="ডেটা সংযোগ এখনো তৈরি হয়নি।";err.hidden=false;return}
+ const phone=$("ex-phone").value.trim();
+ if(phone&&!/^[+0-9০-৯\- ]{6,20}$/.test(phone)){err.textContent="মোবাইল নম্বর সঠিকভাবে লিখুন, যেমন 01XXXXXXXXX";err.hidden=false;return}
+ const d={name:$("ex-name").value.trim(),org:$("ex-org").value.trim(),cat:$("ex-cat").value,area:$("ex-area").value.trim(),phone,at:Date.now(),by:me||null};
+ if(!d.name||!d.org||!d.cat||!d.area)return;
+ try{await db.collection("experts").add(d);$("exForm").reset();toggleForm("exForm",false);toast("নিবন্ধন সম্পন্ন হয়েছে")}catch(x){writeErr(x,err)}};
+
+function stats(){$("statQ").textContent=bn(questions.length);$("statA").textContent=bn(answers.length);$("statE").textContent=bn(experts.length)}
+
+/* boot */
+(async()=>{
+ const c=window.claude;
+ if(!c?.use){lockWrites("শেয়ার করা ডেটা এই ভিউতে পাওয়া যাচ্ছে না। পোর্টালটি claude.ai-তে সাইন ইন করে খুলুন।");db=null;renderQ();return}
+ [db,user]=await Promise.all([c.use("db"),c.use("user")]);
+ if(!db){lockWrites("শেয়ার করা ডেটা দেখতে claude.ai-তে সাইন ইন করে পোর্টালটি খুলুন।");renderQ();return}
+ if(user){try{me=await user.id()}catch(e){}
+  try{canMod=!!(await user.canEdit())}catch(e){}
+  try{const w=await user.can("data.write");if(w===false)lockWrites("আপনি প্রশ্ন ও পরামর্শ পড়তে পারবেন। লিখতে চাইলে পোর্টালের মালিকের কাছে Contributor অনুমতি চেয়ে নিন।")}catch(e){}}
+ renderQ();
+ const onErr=e=>{if(e?.code==="revoked")lockWrites("এই পোর্টালে আপনার প্রবেশাধিকার পরিবর্তিত হয়েছে।")};
+ db.collection("questions").orderBy("at","desc").limit(500).onSnapshot(s=>{questions=s.docs.map(d=>({id:d.id,...d.data()}));stats();renderQ()},onErr);
+ db.collection("answers").limit(1000).onSnapshot(s=>{answers=s.docs.map(d=>({id:d.id,...d.data()}));stats();renderQ()},onErr);
+ db.collection("experts").orderBy("at","desc").limit(500).onSnapshot(s=>{experts=s.docs.map(d=>({id:d.id,...d.data()}));stats();renderEx()},onErr);
+})();
+renderEx();
+</script>
+
+</body></html>
